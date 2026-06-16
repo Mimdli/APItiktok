@@ -1,2 +1,41 @@
-# APItiktok
-api课程作业
+# 简易抖音项目 (Simple TikTok)
+
+这是一个 API 课程小组作业项目，旨在实现一个前后端分离的简易抖音系统。
+
+## 🚀 技术栈
+- **后端**: Java 17, Spring Boot 3, MyBatis-Plus, MySQL
+- **前端**: Vue/React (待定)
+- **核心功能**: 视频推荐、点赞、视频管理、用户系统、监控与日志、安全校验
+
+## 🛠️ 后端环境搭建 (必读)
+
+在启动后端项目之前，请务必完成以下步骤：
+
+### 1. 配置文件设置 (重要)
+为了保护数据库密码等敏感信息，项目采用了环境变量配置。
+1. 在 `backend/` 目录下找到 [.env.example](file:///E:/2025java/APItiktok/backend/.env.example) 文件。
+2. 在同一目录下**新建一个名为 `.env` 的文件**。
+3. 将 `.env.example` 的内容复制到 `.env` 中，并根据你的本地环境修改参数：
+   - `DB_PASSWORD`: 填入你本地 MySQL 的实际密码。
+   - `DB_URL`: 如有需要，修改数据库连接地址。
+   - `UPLOAD_PATH`: 修改视频文件的本地存储路径。
+4. **安全提醒**：`.env` 文件已被包含在 [.gitignore](file:///E:/2025java/APItiktok/.gitignore) 中，**请勿将其提交到 Git 仓库**。
+
+### 2. 数据库初始化
+项目存有 [init.sql](file:///E:/2025java/APItiktok/backend/src/main/resources/init.sql) 文件。
+- 请在你的本地 MySQL 中创建一个名为 `tiktok` 的数据库。
+- 运行 `init.sql` 脚本以创建必要的表结构。
+
+### 3. 运行项目
+- 使用 IDE 打开 `backend` 文件夹。
+- 待 Maven 依赖下载完成后，运行 [TiktokBackendApplication.java](file:///E:/2025java/APItiktok/backend/src/main/java/com/tiktok/backend/TiktokBackendApplication.java)。
+
+## 📁 目录结构说明
+- `backend/`: 后端源代码及任务清单。
+- `frontend/`: 前端源代码及任务清单。
+- `uploads/`: (自动创建) 用于存放上传的视频文件。
+
+## 📝 开发进度
+详细的分工和进度请参考：
+- [后端待办清单](file:///E:/2025java/APItiktok/backend/todo.md)
+- [前端待办清单](file:///E:/2025java/APItiktok/frontend/todo.md)

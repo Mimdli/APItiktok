@@ -1,0 +1,21 @@
+# Maven
+target/
+*.class
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Environment Variables
+.env
+backend/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Specific
+uploads/
