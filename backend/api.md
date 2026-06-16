@@ -40,26 +40,68 @@
 ### 1.1 用户注册
 
 - **URL**: `POST /user/register`
-- **功能描述**:
-- **请求参数**:
-- **请求体**:
-- **响应示例**:
+- **功能描述**: 注册新用户，成功后自动返回登录凭证
+- **请求参数**: 无
+- **请求体** (JSON):
+  ```json
+  {
+    "username": "newuser",
+    "password": "123456"
+  }
+  ```
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": {
+      "token": "eyJhbGciOiJIUzI1NiJ9...",
+      "userId": 4,
+      "username": "newuser"
+    },
+    "msg": "success"
+  }
+  ```
 
 ### 1.2 用户登录
 
 - **URL**: `POST /user/login`
-- **功能描述**:
-- **请求参数**:
-- **请求体**:
-- **响应示例**:
+- **功能描述**: 用户登录，返回 JWT Token
+- **请求参数**: 无
+- **请求体** (JSON):
+  ```json
+  {
+    "username": "alice",
+    "password": "123456"
+  }
+  ```
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": {
+      "token": "eyJhbGciOiJIUzI1NiJ9...",
+      "userId": 1,
+      "username": "alice"
+    },
+    "msg": "success"
+  }
+  ```
 
 ### 1.3 用户注销
 
 - **URL**: `POST /user/logout`
-- **功能描述**:
-- **请求参数**:
-- **请求体**:
-- **响应示例**:
+- **功能描述**: 用户注销（JWT 无状态，客户端清除 Token 即可）
+- **请求头**: `Authorization: Bearer <token>`
+- **请求参数**: 无
+- **请求体**: 无
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": null,
+    "msg": "success"
+  }
+  ```
 
 ---
 
@@ -100,23 +142,80 @@
 ### 3.1 发布视频
 
 - **URL**: `POST /video/publish`
-- **功能描述**:
-- **请求参数**:
-- **请求体**:
-- **响应示例**:
+- **功能描述**: 上传并发布视频（需登录）
+- **请求头**: `Authorization: Bearer <token>`
+- **请求参数** (multipart/form-data):
+  | 参数名 | 类型 | 必填 | 说明 |
+  |:---|:---|:---:|:---|
+  | file | File | 是 | 视频文件（mp4/mov/avi/mkv/webm/flv，最大50MB） |
+  | title | String | 是 | 视频标题 |
+- **请求体**: multipart/form-data
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": {
+      "id": 4,
+      "userId": 1,
+      "videoUrl": "/uploads/a1b2c3d4.mp4",
+      "title": "我的新视频",
+      "likeCount": 0,
+      "createTime": "2026-06-16T12:00:00"
+    },
+    "msg": "success"
+  }
+  ```
 
 ### 3.2 我的视频列表
 
 - **URL**: `GET /video/my`
-- **功能描述**:
+- **功能描述**: 分页查询当前登录用户发布的视频（需登录）
+- **请求头**: `Authorization: Bearer <token>`
 - **请求参数**:
-- **请求体**:
-- **响应示例**:
+  | 参数名 | 类型 | 必填 | 说明 |
+  |:---|:---|:---:|:---|
+  | page | int | 否 | 页码，默认 1 |
+  | size | int | 否 | 每页条数，默认 10，最大 50 |
+- **请求体**: 无
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": {
+      "records": [
+        {
+          "id": 1,
+          "userId": 1,
+          "videoUrl": "service/video/sample1.mp4",
+          "title": "测试视频1 - 风景航拍",
+          "likeCount": 5,
+          "createTime": "2026-06-16T12:00:00"
+        }
+      ],
+      "total": 1,
+      "page": 1,
+      "size": 10,
+      "pages": 1
+    },
+    "msg": "success"
+  }
+  ```
 
 ### 3.3 删除视频
 
 - **URL**: `DELETE /video/delete/{id}`
-- **功能描述**:
+- **功能描述**: 删除指定视频，仅视频发布者可操作（需登录）
+- **请求头**: `Authorization: Bearer <token>`
 - **请求参数**:
-- **请求体**:
-- **响应示例**:
+  | 参数名 | 类型 | 必填 | 说明 |
+  |:---|:---|:---:|:---|
+  | id | Long | 是 | 视频 ID（路径参数） |
+- **请求体**: 无
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": null,
+    "msg": "success"
+  }
+  ```

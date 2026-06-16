@@ -49,4 +49,24 @@ public class FileService {
 
         return filename;
     }
+
+    public void deleteVideo(String videoUrl) {
+        if (videoUrl == null || videoUrl.contains("/") || videoUrl.contains("\\")) {
+            return;
+        }
+        File file = new File(uploadPath + videoUrl);
+        if (file.exists() && file.isFile()) {
+            file.delete();
+        }
+    }
+
+    public String toAccessUrl(String videoUrl) {
+        if (videoUrl == null) {
+            return null;
+        }
+        if (videoUrl.contains("/") || videoUrl.contains("\\")) {
+            return videoUrl;
+        }
+        return "/uploads/" + videoUrl;
+    }
 }
