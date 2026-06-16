@@ -18,4 +18,4 @@ backend/.env
 Thumbs.db
 
 # Project Specific
-uploads/
+# uploads/  # 测试视频已纳入版本管理，取消注释可忽略用户上传的大文件
