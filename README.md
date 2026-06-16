@@ -28,12 +28,34 @@
 
 ### 3. 运行项目
 - 使用 IDE 打开 `backend` 文件夹。
-- 待 Maven 依赖下载完成后，运行 [TiktokBackendApplication.java](file:///E:/2025java/APItiktok/backend/src/main/java/com/tiktok/backend/TiktokBackendApplication.java)。
+- 待 Maven 依赖下载完成后，运行 [App.java](file:///E:/2025java/APItiktok/backend/src/main/java/com/tiktok/App.java)。
+
+## 📹 视频上传要求
+
+上传视频需满足以下格式要求：
+
+| 项目 | 要求 |
+|:---|:---|
+| **支持格式** | `.mp4`、`.mov`、`.avi`、`.mkv`、`.webm`、`.flv` |
+| **单文件大小上限** | 50MB |
+| **文件名** | 自动生成唯一文件名，无需手动重命名 |
+
+> 不符合格式或超过大小限制的视频将上传失败并返回错误提示。
 
 ## 📁 目录结构说明
 - `backend/`: 后端源代码及任务清单。
 - `frontend/`: 前端源代码及任务清单。
 - `uploads/`: (自动创建) 用于存放上传的视频文件。
+
+## 📋 API 接口文档
+
+后端开发人员完成每个接口后，请根据分组及时到 [api.md](file:///E:/2025java/APItiktok/backend/api.md) 中填写对应的接口信息，包括：
+
+- 接口 URL、请求方式
+- 请求参数及请求体格式
+- 响应示例
+
+> 接口文档由后端人员共同维护，**推荐流组** 和 **内容管理组** 各自填写自己部分的接口，确保前后端联调时信息同步。
 
 ## 📝 开发进度
 详细的分工和进度请参考：
