@@ -112,26 +112,87 @@
 ### 2.1 获取推荐视频流
 
 - **URL**: `GET /video/feed`
-- **功能描述**:
+- **功能描述**: 按点赞数从高到低获取推荐视频列表，支持排除已看视频（需登录后可查看点赞状态）
 - **请求参数**:
-- **请求体**:
-- **响应示例**:
+  | 参数名 | 类型 | 必填 | 说明 |
+  |:---|:---|:---:|:---|
+  | excludeIds | Long[] | 否 | 需要排除的视频 ID 列表（已看视频过滤） |
+  | size | int | 否 | 每页条数，默认 10，最大 50 |
+- **请求体**: 无
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": [
+      {
+        "id": 3,
+        "userId": 3,
+        "videoUrl": "/uploads/xxx.mp4",
+        "title": "测试视频3 - 自然风光",
+        "likeCount": 8,
+        "createTime": "2026-06-16T12:00:00",
+        "liked": true
+      },
+      {
+        "id": 1,
+        "userId": 1,
+        "videoUrl": "/uploads/xxx.mp4",
+        "title": "测试视频1 - 风景航拍",
+        "likeCount": 5,
+        "createTime": "2026-06-16T12:00:00",
+        "liked": false
+      }
+    ],
+    "msg": "success"
+  }
+  ```
 
 ### 2.2 视频上下滑动
 
-- **URL**: `GET /video/next` / `GET /video/prev`
-- **功能描述**:
+- **URL**: `GET /video/next/{currentId}` / `GET /video/prev/{currentId}`
+- **功能描述**: 获取当前视频的上一个/下一个视频（按点赞数排序），用于上下滑动切换
 - **请求参数**:
-- **请求体**:
-- **响应示例**:
+  | 参数名 | 类型 | 必填 | 说明 |
+  |:---|:---|:---:|:---|
+  | currentId | Long | 是 | 当前视频 ID（路径参数） |
+  | excludeIds | Long[] | 否 | 需要排除的视频 ID 列表 |
+- **请求体**: 无
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": {
+      "id": 1,
+      "userId": 1,
+      "videoUrl": "/uploads/xxx.mp4",
+      "title": "测试视频1 - 风景航拍",
+      "likeCount": 5,
+      "createTime": "2026-06-16T12:00:00",
+      "liked": false
+    },
+    "msg": "success"
+  }
+  ```
+  > 若无上一个/下一个视频，`data` 为 `null`
 
 ### 2.3 点赞 / 取消点赞
 
-- **URL**: `POST /video/like` / `POST /video/unlike`
-- **功能描述**:
+- **URL**: `POST /video/like/{videoId}` / `POST /video/unlike/{videoId}`
+- **功能描述**: 对视频进行点赞或取消点赞（需登录，支持幂等：重复点赞/取消不报错）
+- **请求头**: `Authorization: Bearer <token>`
 - **请求参数**:
-- **请求体**:
-- **响应示例**:
+  | 参数名 | 类型 | 必填 | 说明 |
+  |:---|:---|:---:|:---|
+  | videoId | Long | 是 | 视频 ID（路径参数） |
+- **请求体**: 无
+- **响应示例** (JSON):
+  ```json
+  {
+    "code": 200,
+    "data": null,
+    "msg": "success"
+  }
+  ```
 
 ---
 

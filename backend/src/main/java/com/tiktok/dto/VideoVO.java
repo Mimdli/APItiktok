@@ -18,4 +18,6 @@ public class VideoVO {
     private Integer likeCount;
 
     private LocalDateTime createTime;
+
+    private Boolean liked;
 }
