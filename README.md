@@ -9,26 +9,103 @@
 
 ## 🛠️ 后端环境搭建 (必读)
 
-在启动后端项目之前，请务必完成以下步骤：
+在启动后端项目之前，请务必按以下顺序完成：
 
-### 1. 配置文件设置 (重要)
-为了保护数据库密码等敏感信息，项目采用了环境变量配置。
-1. 在 `backend/` 目录下找到 [.env.example](backend/.env.example) 文件。
-2. 在同一目录下**新建一个名为 `.env` 的文件**。
-3. 将 `.env.example` 的内容复制到 `.env` 中，并根据你的本地环境修改参数：
-   - `DB_PASSWORD`: 填入你本地 MySQL 的实际密码。
-   - `DB_URL`: 如有需要，修改数据库连接地址。
-   - `UPLOAD_PATH`: 修改视频文件的本地存储路径。
-4. **安全提醒**：`.env` 文件已被包含在 [.gitignore](.gitignore) 中，**请勿将其提交到 Git 仓库**。
+> 💡 **前置条件**：确保你的电脑已安装以下软件：
+> - **JDK 17+**（已安装请在终端执行 `java -version` 验证）
+> - **Maven 3.6+**（已安装请在终端执行 `mvn -v` 验证）
+> - **MySQL 8.0+**（已安装请在终端执行 `mysql --version` 验证）
 
-### 2. 数据库初始化
-项目存有 [init.sql](backend/src/main/resources/init.sql) 文件。
-- 请在你的本地 MySQL 中创建一个名为 `tiktok` 的数据库。
-- 运行 `init.sql` 脚本以创建必要的表结构。
+---
+
+### 1. 数据库初始化
+
+> ⚠️ 请先完成此步骤，否则后端启动时会因数据库连接失败而报错。
+
+- 打开 MySQL 命令行或图形化工具（如 Navicat、MySQL Workbench）。
+- 执行项目中的 [init.sql](backend/src/main/resources/init.sql) 脚本，它会自动完成以下操作：
+
+```sql
+-- 创建数据库
+CREATE DATABASE IF NOT EXISTS tiktok ...;
+
+-- 创建用户表、视频表、点赞记录表
+-- 插入 3 个测试用户
+-- 插入 3 条测试视频记录
+-- 插入测试点赞记录
+```
+
+**命令行执行方式：**
+```bash
+mysql -u root -p < backend/src/main/resources/init.sql
+```
+
+你也可以直接打开 `init.sql` 文件，复制全部内容粘贴到 MySQL 工具中执行。
+
+---
+
+### 2. 配置文件设置
+
+为了保护数据库密码等敏感信息，项目采用环境变量管理配置。
+
+**首次运行必须操作：**
+
+1. 找到 [.env.example](backend/.env.example)。
+2. 在 `backend/` 目录下**新建一个 `.env` 文件**，将 `.env.example` 的内容复制进去。
+3. 修改关键参数：
+
+   | 参数 | 说明 | 示例值 |
+   |:---|:---|:---|
+   | `DB_PASSWORD` | 你的 MySQL 密码（必填） | `root123` |
+   | `DB_URL` | 数据库连接地址（一般不需改） | `jdbc:mysql://localhost:3306/tiktok?...` |
+   | `UPLOAD_PATH` | 视频文件存储路径（按需修改） | `E:/2025java/APItiktok/backend/...` |
+
+   ```ini
+   # 修改后示例
+   DB_PASSWORD=root123
+   ```
+
+4. **安全提醒**：`.env` 文件已被 [.gitignore](.gitignore) 忽略，**请勿将其提交到 Git**。
+
+---
 
 ### 3. 运行项目
-- 使用 IDE 打开 `backend` 文件夹。
-- 待 Maven 依赖下载完成后，运行 [App.java](backend/src/main/java/com/tiktok/App.java)。
+
+#### 方式一：使用 IDE 运行（推荐）
+
+1. 用 **IntelliJ IDEA** 或 **VS Code** 打开项目根目录。
+2. 等待 Maven 自动下载依赖（右下角可查看进度条）。
+3. 找到启动类 [App.java](backend/src/main/java/com/tiktok/App.java)，点击绿色 ▶️ 运行。
+
+#### 方式二：使用 Maven 命令行运行
+
+```bash
+# 进入后端目录
+cd backend
+
+# 编译并启动（首次运行需下载依赖，耗时约 1-3 分钟）
+mvn spring-boot:run
+```
+
+#### 验证启动成功
+
+当终端出现以下日志时，表示启动成功：
+
+```
+Tomcat started on port(s): 8080 (http)
+Started App in X.XXX seconds
+```
+
+然后打开浏览器访问 http://localhost:8080/，看到 `404` 页面是正常的（因为暂未开发接口）。
+
+#### 常见问题
+
+| 问题 | 解决方法 |
+|:---|:---|
+| `Access denied for user 'root'@'localhost'` | `.env` 中的 `DB_PASSWORD` 填错了，请检查密码 |
+| `Unknown database 'tiktok'` | 未执行 `init.sql`，请先创建数据库 |
+| `Port 8080 already in use` | 端口被占用，关闭占用程序或修改 `application.yml` 中的端口号 |
+| Maven 依赖下载慢 | 在 `pom.xml` 所在目录的 `settings.xml` 中配置阿里云镜像 |
 
 ## 📹 视频上传要求
 
