@@ -1,6 +1,6 @@
-package com.tiktok.backend.common.config;
+package com.tiktok.config;
 
-import com.tiktok.backend.common.interceptor.AuthInterceptor;
+import com.tiktok.interceptor.AuthInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -16,6 +16,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/user/login", "/user/register", "/video/feed"); // 开放登录注册和推荐流
+                .excludePathPatterns("/user/login", "/user/register", "/video/feed");
     }
 }

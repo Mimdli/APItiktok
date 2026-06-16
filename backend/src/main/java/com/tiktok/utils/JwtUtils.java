@@ -1,4 +1,4 @@
-package com.tiktok.backend.common.utils;
+package com.tiktok.utils;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
