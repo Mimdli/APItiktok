@@ -13,29 +13,51 @@
 
 ### 1. 配置文件设置 (重要)
 为了保护数据库密码等敏感信息，项目采用了环境变量配置。
-1. 在 `backend/` 目录下找到 [.env.example](file:///E:/2025java/APItiktok/backend/.env.example) 文件。
+1. 在 `backend/` 目录下找到 [.env.example](backend/.env.example) 文件。
 2. 在同一目录下**新建一个名为 `.env` 的文件**。
 3. 将 `.env.example` 的内容复制到 `.env` 中，并根据你的本地环境修改参数：
    - `DB_PASSWORD`: 填入你本地 MySQL 的实际密码。
    - `DB_URL`: 如有需要，修改数据库连接地址。
    - `UPLOAD_PATH`: 修改视频文件的本地存储路径。
-4. **安全提醒**：`.env` 文件已被包含在 [.gitignore](file:///E:/2025java/APItiktok/.gitignore) 中，**请勿将其提交到 Git 仓库**。
+4. **安全提醒**：`.env` 文件已被包含在 [.gitignore](.gitignore) 中，**请勿将其提交到 Git 仓库**。
 
 ### 2. 数据库初始化
-项目存有 [init.sql](file:///E:/2025java/APItiktok/backend/src/main/resources/init.sql) 文件。
+项目存有 [init.sql](backend/src/main/resources/init.sql) 文件。
 - 请在你的本地 MySQL 中创建一个名为 `tiktok` 的数据库。
 - 运行 `init.sql` 脚本以创建必要的表结构。
 
 ### 3. 运行项目
 - 使用 IDE 打开 `backend` 文件夹。
-- 待 Maven 依赖下载完成后，运行 [TiktokBackendApplication.java](file:///E:/2025java/APItiktok/backend/src/main/java/com/tiktok/backend/TiktokBackendApplication.java)。
+- 待 Maven 依赖下载完成后，运行 [App.java](backend/src/main/java/com/tiktok/App.java)。
+
+## 📹 视频上传要求
+
+上传视频需满足以下格式要求：
+
+| 项目 | 要求 |
+|:---|:---|
+| **支持格式** | `.mp4`、`.mov`、`.avi`、`.mkv`、`.webm`、`.flv` |
+| **单文件大小上限** | 50MB |
+| **文件名** | 自动生成唯一文件名，无需手动重命名 |
+
+> 不符合格式或超过大小限制的视频将上传失败并返回错误提示。
 
 ## 📁 目录结构说明
 - `backend/`: 后端源代码及任务清单。
 - `frontend/`: 前端源代码及任务清单。
 - `uploads/`: (自动创建) 用于存放上传的视频文件。
 
+## 📋 API 接口文档
+
+后端开发人员完成每个接口后，请根据分组及时到 [api.md](backend/api.md) 中填写对应的接口信息，包括：
+
+- 接口 URL、请求方式
+- 请求参数及请求体格式
+- 响应示例
+
+> 接口文档由后端人员共同维护，**推荐流组** 和 **内容管理组** 各自填写自己部分的接口，确保前后端联调时信息同步。
+
 ## 📝 开发进度
 详细的分工和进度请参考：
-- [后端待办清单](file:///E:/2025java/APItiktok/backend/todo.md)
-- [前端待办清单](file:///E:/2025java/APItiktok/frontend/todo.md)
+- [后端待办清单](backend/todo.md)
+- [前端待办清单](frontend/todo.md)

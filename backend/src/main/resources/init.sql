@@ -42,3 +42,14 @@ INSERT INTO `user` (`id`, `username`, `password`) VALUES
 (1, 'alice', '123456'),
 (2, 'bob', '123456'),
 (3, 'charlie', '123456');
+
+-- 插入测试视频（引用 service/video/ 目录下的文件）
+INSERT INTO `video` (`id`, `user_id`, `video_url`, `title`, `like_count`) VALUES
+(1, 1, 'service/video/sample1.mp4', '测试视频1 - 风景航拍', 5),
+(2, 2, 'service/video/sample2.mp4', '测试视频2 - 城市漫步', 3),
+(3, 3, 'service/video/sample3.mp4', '测试视频3 - 自然风光', 8);
+
+-- bob 给视频1和视频3点赞
+INSERT INTO `video_like` (`user_id`, `video_id`) VALUES
+(2, 1),
+(2, 3);
