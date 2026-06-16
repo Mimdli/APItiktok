@@ -36,3 +36,9 @@ CREATE TABLE IF NOT EXISTS `video_like` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `uk_user_video` (`user_id`, `video_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='点赞记录表';
+
+-- 插入测试用户
+INSERT INTO `user` (`id`, `username`, `password`) VALUES
+(1, 'alice', '123456'),
+(2, 'bob', '123456'),
+(3, 'charlie', '123456');

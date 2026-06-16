@@ -1,6 +1,6 @@
-package com.tiktok.backend.common.interceptor;
+package com.tiktok.interceptor;
 
-import com.tiktok.backend.common.utils.JwtUtils;
+import com.tiktok.utils.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 放行 OPTIONS 请求
         if ("OPTIONS".equals(request.getMethod())) {
             return true;
         }
@@ -25,7 +24,6 @@ public class AuthInterceptor implements HandlerInterceptor {
             token = token.substring(7);
             try {
                 Long userId = jwtUtils.getUserIdFromToken(token);
-                // 将 userId 存入 request 方便后续使用
                 request.setAttribute("userId", userId);
                 return true;
             } catch (Exception e) {

@@ -1,4 +1,4 @@
-package com.tiktok.backend.common.aop;
+package com.tiktok.aop;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 @Slf4j
 public class LogAspect {
 
-    @Pointcut("execution(* com.tiktok.backend.controller..*.*(..))")
+    @Pointcut("execution(* com.tiktok.controller..*.*(..))")
     public void controllerPointcut() {}
 
     @Around("controllerPointcut()")
@@ -27,7 +27,6 @@ public class LogAspect {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
 
-        // 记录请求信息 (输入)
         log.info("URL: {}, Method: {}, IP: {}, Class: {}, Args: {}",
                 request.getRequestURL().toString(),
                 request.getMethod(),
@@ -37,7 +36,6 @@ public class LogAspect {
 
         Object result = joinPoint.proceed();
 
-        // 记录输出与耗时 (输出)
         long endTime = System.currentTimeMillis();
         log.info("Response: {}, Time Cost: {}ms", result, (endTime - startTime));
 

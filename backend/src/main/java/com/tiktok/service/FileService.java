@@ -1,4 +1,4 @@
-package com.tiktok.backend.service;
+package com.tiktok.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,6 @@ public class FileService {
         File targetFile = new File(uploadPath + filename);
         file.transferTo(targetFile);
 
-        return filename; // 返回文件名或相对路径
+        return filename;
     }
 }

@@ -1,13 +1,13 @@
-package com.tiktok.backend;
+package com.tiktok;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TiktokBackendApplication {
+public class App {
 
     public static void main(String[] args) {
-        SpringApplication.run(TiktokBackendApplication.class, args);
+        SpringApplication.run(App.class, args);
     }
 
 }
