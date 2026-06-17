@@ -200,6 +200,19 @@ public class VideoService {
             throw new BusinessException("当前视频不存在");
         }
 
+        // 收集排除列表：已浏览 + 已点赞
+        Set<Long> excluded = new HashSet<>();
+        if (excludeIds != null) {
+            excluded.addAll(excludeIds);
+        }
+        if (userId != null) {
+            List<Long> likedIds = videoLikeMapper.selectList(
+                            new LambdaQueryWrapper<VideoLike>()
+                                    .eq(VideoLike::getUserId, userId))
+                    .stream().map(VideoLike::getVideoId).collect(Collectors.toList());
+            excluded.addAll(likedIds);
+        }
+
         LambdaQueryWrapper<Video> wrapper = new LambdaQueryWrapper<Video>()
                 .and(w -> w
                         .lt(Video::getLikeCount, current.getLikeCount())
@@ -209,8 +222,8 @@ public class VideoService {
                 .orderByDesc(Video::getLikeCount)
                 .orderByDesc(Video::getId);
 
-        if (excludeIds != null && !excludeIds.isEmpty()) {
-            excludeIds.forEach(id -> {
+        if (!excluded.isEmpty()) {
+            excluded.forEach(id -> {
                 if (!id.equals(currentId)) {
                     wrapper.ne(Video::getId, id);
                 }
@@ -230,6 +243,19 @@ public class VideoService {
             throw new BusinessException("当前视频不存在");
         }
 
+        // 收集排除列表：已浏览 + 已点赞
+        Set<Long> excluded = new HashSet<>();
+        if (excludeIds != null) {
+            excluded.addAll(excludeIds);
+        }
+        if (userId != null) {
+            List<Long> likedIds = videoLikeMapper.selectList(
+                            new LambdaQueryWrapper<VideoLike>()
+                                    .eq(VideoLike::getUserId, userId))
+                    .stream().map(VideoLike::getVideoId).collect(Collectors.toList());
+            excluded.addAll(likedIds);
+        }
+
         LambdaQueryWrapper<Video> wrapper = new LambdaQueryWrapper<Video>()
                 .and(w -> w
                         .gt(Video::getLikeCount, current.getLikeCount())
@@ -239,8 +265,8 @@ public class VideoService {
                 .orderByAsc(Video::getLikeCount)
                 .orderByAsc(Video::getId);
 
-        if (excludeIds != null && !excludeIds.isEmpty()) {
-            excludeIds.forEach(id -> {
+        if (!excluded.isEmpty()) {
+            excluded.forEach(id -> {
                 if (!id.equals(currentId)) {
                     wrapper.ne(Video::getId, id);
                 }
