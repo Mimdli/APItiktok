@@ -179,7 +179,7 @@ public class VideoService {
         return toVOList(videoPage.getRecords(), userId);
     }
 
-    public VideoVO getNextVideo(Long currentId, List<Long> excludeIds) {
+    public VideoVO getNextVideo(Long currentId, Long userId, List<Long> excludeIds) {
         Video current = videoMapper.selectById(currentId);
         if (current == null) {
             throw new BusinessException("当前视频不存在");
@@ -206,10 +206,10 @@ public class VideoService {
         if (page.getRecords().isEmpty()) {
             return null;
         }
-        return toVO(page.getRecords().get(0), null);
+        return toVO(page.getRecords().get(0), userId);
     }
 
-    public VideoVO getPrevVideo(Long currentId, List<Long> excludeIds) {
+    public VideoVO getPrevVideo(Long currentId, Long userId, List<Long> excludeIds) {
         Video current = videoMapper.selectById(currentId);
         if (current == null) {
             throw new BusinessException("当前视频不存在");
@@ -236,7 +236,7 @@ public class VideoService {
         if (page.getRecords().isEmpty()) {
             return null;
         }
-        return toVO(page.getRecords().get(0), null);
+        return toVO(page.getRecords().get(0), userId);
     }
 
     // ==================== VO 转换 ====================
@@ -271,6 +271,12 @@ public class VideoService {
         VideoVO vo = new VideoVO();
         BeanUtils.copyProperties(video, vo);
         vo.setVideoUrl(fileService.toAccessUrl(video.getVideoUrl()));
+        if (userId != null) {
+            Long count = videoLikeMapper.selectCount(new LambdaQueryWrapper<VideoLike>()
+                    .eq(VideoLike::getUserId, userId)
+                    .eq(VideoLike::getVideoId, video.getId()));
+            vo.setLiked(count > 0);
+        }
         return vo;
     }
 }

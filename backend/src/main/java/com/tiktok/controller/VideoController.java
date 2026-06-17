@@ -88,7 +88,8 @@ public class VideoController {
             HttpServletRequest request,
             @PathVariable Long currentId,
             @RequestParam(required = false) List<Long> excludeIds) {
-        VideoVO vo = videoService.getNextVideo(currentId, excludeIds);
+        Long userId = (Long) request.getAttribute("userId");
+        VideoVO vo = videoService.getNextVideo(currentId, userId, excludeIds);
         return Result.success(vo);
     }
 
@@ -97,7 +98,8 @@ public class VideoController {
             HttpServletRequest request,
             @PathVariable Long currentId,
             @RequestParam(required = false) List<Long> excludeIds) {
-        VideoVO vo = videoService.getPrevVideo(currentId, excludeIds);
+        Long userId = (Long) request.getAttribute("userId");
+        VideoVO vo = videoService.getPrevVideo(currentId, userId, excludeIds);
         return Result.success(vo);
     }
 }

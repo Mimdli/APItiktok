@@ -68,18 +68,24 @@ async function goNext() {
     const res = await videoApi.getNextVideo(currentVideo.value.id, viewedIds.value)
     const next = res.data
     if (next) {
-      videos.value.push(next)
-      currentIndex.value += 1
+      // 如果返回的视频已在列表中，直接跳转到对应位置（避免重复添加）
+      const existIndex = videos.value.findIndex(v => v.id === next.id)
+      if (existIndex >= 0) {
+        currentIndex.value = existIndex
+      } else {
+        videos.value.push(next)
+        currentIndex.value = videos.value.length - 1
+      }
       markViewed(next.id)
       return
     }
 
-    // 列表到底后，按 excludeIds 重新拉推荐流（看过不再推荐）
+    // 列表到底后，按 excludeIds 重新拉推荐流
     const feedRes = await videoApi.getFeed(viewedIds.value)
     const more = Array.isArray(feedRes.data) ? feedRes.data : []
     if (more.length) {
       videos.value.push(...more)
-      currentIndex.value += 1
+      currentIndex.value = videos.value.length - 1
       markViewed(currentVideo.value?.id)
     } else {
       feedHint.value = '已经是最后一个视频了'
@@ -106,8 +112,14 @@ async function goPrev() {
     const res = await videoApi.getPrevVideo(currentVideo.value.id, viewedIds.value)
     const prev = res.data
     if (prev) {
-      videos.value.unshift(prev)
-      currentIndex.value = 0
+      // 如果返回的视频已在列表中，直接跳转到对应位置
+      const existIndex = videos.value.findIndex(v => v.id === prev.id)
+      if (existIndex >= 0) {
+        currentIndex.value = existIndex
+      } else {
+        videos.value.unshift(prev)
+        currentIndex.value = 0
+      }
       markViewed(prev.id)
     } else {
       feedHint.value = '已经是第一个视频了'
