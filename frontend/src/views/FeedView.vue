@@ -79,7 +79,6 @@ async function goNext() {
     const res = await videoApi.getNextVideo(currentVideo.value.id, viewedIds.value)
     const next = res.data
     if (next) {
-      // 如果返回的视频已在列表中，直接跳转到对应位置（避免重复添加）
       const existIndex = videos.value.findIndex(v => v.id === next.id)
       if (existIndex >= 0) {
         currentIndex.value = existIndex
@@ -88,21 +87,12 @@ async function goNext() {
         currentIndex.value = videos.value.length - 1
       }
       markViewed(next.id)
-      return
-    }
-
-    // 列表到底后，按 excludeIds 重新拉推荐流
-    const feedRes = await videoApi.getFeed(viewedIds.value)
-    const more = Array.isArray(feedRes.data) ? feedRes.data : []
-    if (more.length) {
-      videos.value.push(...more)
-      currentIndex.value = videos.value.length - 1
-      markViewed(currentVideo.value?.id)
     } else {
       showToastMessage('已经是最后一个视频了')
     }
   } catch (e) {
-    error.value = e.message
+    showToastMessage('已经是最后一个视频了')
+    console.error('getNextVideo error:', e)
   } finally {
     switching.value = false
   }
@@ -349,3 +339,4 @@ onMounted(loadFeed)
   pointer-events: none !important;
   box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
 }
+</style>
