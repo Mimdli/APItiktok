@@ -212,6 +212,9 @@ onMounted(loadFeed)
         <p v-if="feedHint" class="hint-text">{{ feedHint }}</p>
       </div>
 
+      <!-- 全屏提示浮层 -->
+      <div v-if="feedHint" class="toast-overlay">{{ feedHint }}</div>
+
       <div class="actions">
         <button type="button" class="action-btn" @click="goPrev">上一个</button>
         <button
@@ -299,6 +302,32 @@ onMounted(loadFeed)
   padding: 24px;
   text-align: center;
   color: rgba(255, 255, 255, 0.75);
+}
+
+.hint-text {
+  color: #ffd93d;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 8px;
+  padding: 8px 16px;
+  background: rgba(255, 217, 61, 0.1);
+  border-radius: 8px;
+}
+
+.toast-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 20px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  z-index: 100;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  pointer-events: none;
 }
 
 .retry-btn {
