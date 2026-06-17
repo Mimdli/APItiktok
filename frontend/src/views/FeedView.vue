@@ -183,6 +183,13 @@ watch(
   },
 )
 
+// 自动清除提示（3秒后消失）
+watch(feedHint, (val) => {
+  if (val) {
+    setTimeout(() => { feedHint.value = '' }, 3000)
+  }
+})
+
 onMounted(loadFeed)
 </script>
 
@@ -209,11 +216,7 @@ onMounted(loadFeed)
       <div class="info">
         <h2>{{ currentVideo.title }}</h2>
         <p>点赞 {{ currentVideo.likeCount || 0 }}</p>
-        <p v-if="feedHint" class="hint-text">{{ feedHint }}</p>
       </div>
-
-      <!-- 全屏提示浮层 -->
-      <div v-if="feedHint" class="toast-overlay">{{ feedHint }}</div>
 
       <div class="actions">
         <button type="button" class="action-btn" @click="goPrev">上一个</button>
@@ -235,6 +238,8 @@ onMounted(loadFeed)
       <button class="btn-ghost retry-btn" type="button" @click="loadFeed">重新加载</button>
       <router-link v-if="!auth.isLoggedIn" class="btn-ghost retry-btn" to="/login">去登录</router-link>
     </div>
+    <!-- 全局通知浮层 -->
+    <div v-if="feedHint" class="toast-overlay">{{ feedHint }}</div>
   </div>
 </template>
 

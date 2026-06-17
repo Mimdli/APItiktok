@@ -167,12 +167,27 @@ public class VideoService {
             size = 10;
         }
 
+        // 收集需要排除的视频 ID：已浏览的 + 已点赞的
+        Set<Long> excluded = new HashSet<>();
+        if (excludeIds != null) {
+            excluded.addAll(excludeIds);
+        }
+        if (userId != null) {
+            List<Long> likedIds = videoLikeMapper.selectList(
+                            new LambdaQueryWrapper<VideoLike>()
+                                    .eq(VideoLike::getUserId, userId))
+                    .stream()
+                    .map(VideoLike::getVideoId)
+                    .collect(Collectors.toList());
+            excluded.addAll(likedIds);
+        }
+
         LambdaQueryWrapper<Video> wrapper = new LambdaQueryWrapper<Video>()
                 .orderByDesc(Video::getLikeCount)
                 .orderByDesc(Video::getId);
 
-        if (excludeIds != null && !excludeIds.isEmpty()) {
-            wrapper.notIn(Video::getId, excludeIds);
+        if (!excluded.isEmpty()) {
+            wrapper.notIn(Video::getId, excluded);
         }
 
         Page<Video> videoPage = videoMapper.selectPage(new Page<>(1, size), wrapper);
