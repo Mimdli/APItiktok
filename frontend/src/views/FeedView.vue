@@ -14,6 +14,8 @@ const loading = ref(true)
 const error = ref('')
 const feedHint = ref('')
 const switching = ref(false)
+const toastText = ref('')
+let toastTimer = null
 
 const currentVideo = computed(() => videos.value[currentIndex.value] || null)
 
@@ -26,6 +28,15 @@ function resolveVideoUrl(url) {
 function markViewed(id) {
   if (!id || viewedIds.value.includes(id)) return
   viewedIds.value.push(id)
+}
+
+function showToastMessage(msg) {
+  if (toastTimer) clearTimeout(toastTimer)
+  toastText.value = msg
+  toastTimer = setTimeout(() => {
+    toastText.value = ''
+    toastTimer = null
+  }, 2500)
 }
 
 async function loadFeed() {
@@ -88,7 +99,7 @@ async function goNext() {
       currentIndex.value = videos.value.length - 1
       markViewed(currentVideo.value?.id)
     } else {
-      feedHint.value = '已经是最后一个视频了'
+      showToastMessage('已经是最后一个视频了')
     }
   } catch (e) {
     error.value = e.message
@@ -122,7 +133,7 @@ async function goPrev() {
       }
       markViewed(prev.id)
     } else {
-      feedHint.value = '已经是第一个视频了'
+      showToastMessage('已经是第一个视频了')
     }
   } catch (e) {
     error.value = e.message
@@ -183,13 +194,6 @@ watch(
   },
 )
 
-// 自动清除提示（3秒后消失）
-watch(feedHint, (val) => {
-  if (val) {
-    setTimeout(() => { feedHint.value = '' }, 3000)
-  }
-})
-
 onMounted(loadFeed)
 </script>
 
@@ -238,9 +242,11 @@ onMounted(loadFeed)
       <button class="btn-ghost retry-btn" type="button" @click="loadFeed">重新加载</button>
       <router-link v-if="!auth.isLoggedIn" class="btn-ghost retry-btn" to="/login">去登录</router-link>
     </div>
-    <!-- 全局通知浮层 -->
-    <div v-if="feedHint" class="toast-overlay">{{ feedHint }}</div>
   </div>
+  <!-- 全局通知浮层 (Teleport 到 body 确保可见) -->
+  <Teleport to="body">
+    <div v-if="toastText" class="toast-overlay">{{ toastText }}</div>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -319,23 +325,27 @@ onMounted(loadFeed)
   border-radius: 8px;
 }
 
-.toast-overlay {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(0, 0, 0, 0.85);
-  color: #fff;
-  padding: 20px 32px;
-  border-radius: 12px;
-  font-size: 16px;
-  z-index: 100;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  pointer-events: none;
-}
-
 .retry-btn {
   margin-top: 8px;
 }
 </style>
+
+<!-- 非 scoped 样式，确保 Teleport 到 body 的 toast 也能生效 -->
+<style>
+.toast-overlay {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: #fff !important;
+  padding: 24px 40px !important;
+  border-radius: 14px !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  z-index: 99999 !important;
+  text-align: center !important;
+  border: 2px solid rgba(255, 217, 61, 0.6) !important;
+  pointer-events: none !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
